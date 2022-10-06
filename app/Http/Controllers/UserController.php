@@ -18,7 +18,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        //
+        $data = User::all();
+
+        return $this->handleResponse(UserResource::collection($data), "Success get user");
     }
 
     /**
@@ -108,7 +110,31 @@ class UserController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validate = [
+            'name' => 'required',
+            'email' => 'required',
+            'password' => 'required'
+        ];
+
+        $validatedData = Validator::make($request->all(), $validate);
+        if ($validatedData->fails()) {
+            return $this->handleError("Validation Failed", $validatedData->errors());
+        }
+
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => bcrypt($request->password),
+            'address' => $request->address,
+            'phone' => $request->phone,
+            'identity_type' => $request->identity_type,
+            'identity_number' => $request->identity_number,
+        ];
+
+        $user = User::findOrFail($id);
+        $user->update($data);
+
+        return $this->handleResponse(new UserResource($user), "Success create User $user->name");
     }
 
     /**
@@ -119,6 +145,9 @@ class UserController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id);
+        $user->delete();
+
+        return $this->handleResponse(new UserResource($user), "Success delete User");
     }
 }

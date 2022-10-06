@@ -17,7 +17,7 @@ class ItemControler extends Controller
     public function index()
     {
         $item = Items::get();
-        return $this->handleResponse(ItemResource::collection($item), "Success get categories");
+        return $this->handleResponse(ItemResource::collection($item), "Success get items");
     }
 
     /**
