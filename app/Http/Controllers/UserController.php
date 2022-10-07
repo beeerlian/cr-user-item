@@ -44,7 +44,8 @@ class UserController extends Controller
         $validate = [
             'name' => 'required',
             'email' => 'required',
-            'password' => 'required'
+            'password' => 'required',
+            'role' => 'required'
         ];
 
         $validatedData = Validator::make($request->all(), $validate);
@@ -58,9 +59,11 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
             'address' => $request->address,
             'phone' => $request->phone,
+            'role' => $request->role,
             'identity_type' => $request->identity_type,
             'identity_number' => $request->identity_number,
         ];
+
 
         $user = User::create($data);
 
@@ -70,11 +73,11 @@ class UserController extends Controller
 
     public function login(Request $request) {
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])) {
-            $data = Auth::user(); 
+            $data = Auth::user();
 
             return $this->handleResponse(new UserResource($data), "Success signed in $data->name");
         }
-        else{ 
+        else{
             return $this->handleError('Unauthorised.', ['error'=>'Unauthorised']);
         }
     }
@@ -127,6 +130,7 @@ class UserController extends Controller
             'password' => bcrypt($request->password),
             'address' => $request->address,
             'phone' => $request->phone,
+            'role' => $request->role,
             'identity_type' => $request->identity_type,
             'identity_number' => $request->identity_number,
         ];

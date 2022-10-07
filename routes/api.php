@@ -23,7 +23,7 @@ use App\Http\Controllers\ItemControler;
 
 Route::resource('item', ItemControler::class);
 Route::resource('user', UserController::class);
-Route::post('userLogin', [UserController::class, 'login']);
+Route::post('login', [UserController::class, 'login']);
 
 Route::group(['middleware' => ['auth:sanctum']], function () {
 });
