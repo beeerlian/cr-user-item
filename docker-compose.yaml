@@ -1,0 +1,39 @@
+
+version: '3.8'
+services:
+    main:
+        build:
+            context: .
+            dockerfile: Dockerfile
+        command: 'php artisan serve --host=0.0.0.0'
+        environment:
+            DB_CONNECTION: mysql
+            DB_HOST: 127.0.0.1
+            DB_PORT: 3306
+            DB_DATABASE: cr-laravel-db
+            DB_USERNAME: root
+            DB_PASSWORD: password
+            # MYSQL_DATABASE: cr-laravel-db
+            # MYSQL_USER: root
+            # MYSQL_ROOT: root
+            # MYSQL_PASSWORD: password
+            # MYSQL_ROOT_PASSWORD: password
+        volumes:
+            - .:/app
+        ports:
+            - 8000:8000
+        depends_on:
+            - db
+    db:
+        platform: linux/x86_64
+        image: mysql:8.0
+        environment:
+            MYSQL_DATABASE: cr-laravel-db
+            MYSQL_USER: root
+            MYSQL_ROOT: root
+            MYSQL_PASSWORD: password
+            MYSQL_ROOT_PASSWORD: password
+        volumes:
+            - ./storage/dbdata:/var/lib/mysql
+        ports:
+            - 3306:3306
